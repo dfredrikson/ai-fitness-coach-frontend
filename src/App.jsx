@@ -237,18 +237,6 @@ function Register() {
 
 // Dashboard
 
-useEffect(() => {
-    fetchDailyMotivation()
-}, [])
-
-const fetchDailyMotivation = async () => {
-    const res = await fetch("/api/v1/motivation/daily")
-    const data = await res.json()
-    if (data.message) {
-        showNotification(data.message)
-    }
-}
-
 function Dashboard() {
     const { user } = useAuth()
     const [stravaStatus, setStravaStatus] = useState(null)
