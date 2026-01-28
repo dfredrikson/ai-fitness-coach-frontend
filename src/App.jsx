@@ -856,11 +856,7 @@ function App() {
     return (
         <BrowserRouter>
             <AuthProvider>
-                <AppContent
-                    notification={notification}
-                    setNotification={setNotification}
-                    showNotification={showNotification}
-                />
+                <AppContent />
             </AuthProvider>
         </BrowserRouter>
     )
