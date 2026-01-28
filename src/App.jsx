@@ -1,6 +1,7 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate, useLocation } from 'react-router-dom'
 import { auth, strava, activities, coach, routines } from './services/api'
+import NotificationToast from "./components/NotificationToast"
 
 // Auth Context
 const AuthContext = createContext(null)
@@ -235,6 +236,19 @@ function Register() {
 }
 
 // Dashboard
+
+useEffect(() => {
+    fetchDailyMotivation()
+}, [])
+
+const fetchDailyMotivation = async () => {
+    const res = await fetch("/api/v1/motivation/daily")
+    const data = await res.json()
+    if (data.message) {
+        showNotification(data.message)
+    }
+}
+
 function Dashboard() {
     const { user } = useAuth()
     const [stravaStatus, setStravaStatus] = useState(null)
@@ -834,22 +848,35 @@ function Settings() {
 
 // Main App
 function App() {
+    const [notification, setNotification] = useState(null)
+    const showNotification = (msg) => {
+        setNotification(msg)
+    }
+
     return (
         <BrowserRouter>
             <AuthProvider>
-                <AppContent />
+                <AppContent
+                    notification={notification}
+                    setNotification={setNotification}
+                    showNotification={showNotification}
+                />
             </AuthProvider>
         </BrowserRouter>
     )
 }
 
-function AppContent() {
+function AppContent({ notification, setNotification, showNotification }) {
     const { user, loading } = useAuth()
 
     if (loading) return <LoadingScreen />
 
     return (
         <>
+            <NotificationToast
+                message={notification}
+                onClose={() => setNotification(null)}
+            />
             {user && <Navbar />}
             <Routes>
                 <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
