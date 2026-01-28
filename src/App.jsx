@@ -862,7 +862,7 @@ function App() {
     )
 }
 
-function AppContent({ notification, setNotification, showNotification }) {
+function AppContent() {
     const { user, loading } = useAuth()
 
     if (loading) return <LoadingScreen />
