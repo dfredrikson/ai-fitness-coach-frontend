@@ -358,7 +358,7 @@ function Dashboard() {
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-3" style={{ textAlign: 'right' }}>
+                                    <div className="activity-stats flex gap-3">
                                         <div>
                                             <p style={{ fontWeight: 600 }}>{activity.distance_km?.toFixed(2)} km</p>
                                             <p className="text-secondary text-sm">Distancia</p>
@@ -412,7 +412,7 @@ function Activities() {
                 <div className="grid gap-2">
                     {activityList.map(activity => (
                         <Link key={activity.id} to={`/activities/${activity.id}`}>
-                            <div className="card flex-between">
+                            <div className="card activity-card flex-between">
                                 <div className="flex gap-2" style={{ alignItems: 'center' }}>
                                     <span style={{ fontSize: '1.5rem' }}>
                                         {activity.type === 'Run' ? '🏃' : activity.type === 'Ride' ? '🚴' : '💪'}

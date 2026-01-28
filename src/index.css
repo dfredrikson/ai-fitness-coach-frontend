@@ -484,3 +484,38 @@ h4 {
     text-align: center;
   }
 }
+
+/* ===== Activities list (mobile) ===== */
+@media (max-width: 768px) {
+  .activity-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .activity-card h4 {
+    font-size: 1rem;
+  }
+
+  .activity-stats {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .activity-stats>div {
+    text-align: left;
+  }
+
+  .activity-stats p {
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .activity-card .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 999px;
+  }
+}
