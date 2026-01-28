@@ -7,38 +7,38 @@
   --primary-light: #818cf8;
   --secondary: #f97316;
   --secondary-dark: #ea580c;
-  
+
   --success: #10b981;
   --warning: #f59e0b;
   --error: #ef4444;
-  
+
   /* Neutrals */
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
   --bg-tertiary: #334155;
   --bg-card: rgba(30, 41, 59, 0.8);
-  
+
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
-  
+
   --border: rgba(148, 163, 184, 0.2);
   --border-light: rgba(148, 163, 184, 0.1);
-  
+
   /* Gradients */
   --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
   --gradient-secondary: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
   --gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e1a5a 50%, #0f172a 100%);
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4);
   --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.3);
-  
+
   /* Typography */
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  
+
   /* Spacing */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
@@ -142,6 +142,13 @@ a:hover {
   transition: all 0.3s ease;
 }
 
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+}
+
 .card:hover {
   border-color: var(--primary);
   box-shadow: var(--shadow-glow);
@@ -191,6 +198,13 @@ a:hover {
   padding: 0 1.5rem;
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+    max-width: 100%;
+  }
+}
+
 .page {
   flex: 1;
   padding: 2rem 0;
@@ -211,8 +225,16 @@ a:hover {
 }
 
 @media (max-width: 768px) {
-  .grid-2, .grid-3 {
+
+  .grid-2,
+  .grid-3 {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    gap: 1rem;
   }
 }
 
@@ -233,25 +255,71 @@ a:hover {
   justify-content: space-between;
 }
 
-.gap-1 { gap: 0.5rem; }
-.gap-2 { gap: 1rem; }
-.gap-3 { gap: 1.5rem; }
+.gap-1 {
+  gap: 0.5rem;
+}
+
+.gap-2 {
+  gap: 1rem;
+}
+
+.gap-3 {
+  gap: 1.5rem;
+}
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 600;
   line-height: 1.3;
   color: var(--text-primary);
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
+h1 {
+  font-size: 2.5rem;
+}
 
-.text-sm { font-size: 0.875rem; }
-.text-muted { color: var(--text-muted); }
-.text-secondary { color: var(--text-secondary); }
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-secondary {
+  color: var(--text-secondary);
+}
 
 /* Badges */
 .badge {
@@ -287,17 +355,33 @@ h4 { font-size: 1.25rem; }
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .animate-fadeIn {
@@ -334,4 +418,50 @@ h4 { font-size: 1.25rem; }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  #root {
+    width: 100%;
+  }
+}
+
+/* =========================
+   NAVBAR – MOBILE
+   ========================= */
+@media (max-width: 768px) {
+
+  /* Contenedor principal del navbar */
+  nav .container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  /* Logo + título */
+  nav .container>a {
+    justify-content: center;
+  }
+
+  /* Menú de links */
+  nav .flex.gap-2 {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* Links individuales */
+  .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  /* Botón salir */
+  nav .btn {
+    width: 100%;
+    text-align: center;
+  }
 }
