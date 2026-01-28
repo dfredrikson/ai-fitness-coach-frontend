@@ -281,13 +281,13 @@ function Dashboard() {
     return (
         <div className="page">
             <div className="container">
-                <div style={{ marginBottom: '2rem' }}>
-                    <h1>¡Hola, {user?.name}! 👋</h1>
+                <div style={{ marginBottom: '1.25rem' }}>
+                    <h1 style={{ fontSize: '1.75rem' }}>¡Hola, {user?.name}! 👋</h1>
                     <p className="text-secondary">Tu entrenador {activeCoach?.name} está listo para ayudarte</p>
                 </div>
 
                 {/* Strava Connection Card */}
-                <div className="card" style={{ marginBottom: '2rem' }}>
+                <div className="card" style={{ marginBottom: '2rem', borderLeft: '4px solid var(--primary)' }}>
                     <div className="flex-between">
                         <div className="flex gap-2" style={{ alignItems: 'center' }}>
                             <span style={{ fontSize: '2rem' }}>🔗</span>
@@ -321,7 +321,7 @@ function Dashboard() {
                 </div>
 
                 {/* Stats Grid */}
-                <div className="grid grid-3" style={{ marginBottom: '2rem' }}>
+                <div className="grid grid-3 stats-grid" style={{ marginBottom: '1.5rem' }}>
                     <div className="card" style={{ textAlign: 'center' }}>
                         <span style={{ fontSize: '2.5rem' }}>{recentActivities.length}</span>
                         <p className="text-secondary">Actividades recientes</p>
@@ -339,7 +339,7 @@ function Dashboard() {
                 </div>
 
                 {/* Recent Activities */}
-                <h3 style={{ marginBottom: '1rem' }}>Actividades Recientes</h3>
+                <h3 style={{ marginBottom: '0.75rem' }}>Últimas actividades</h3>
                 {recentActivities.length > 0 ? (
                     <div className="grid gap-2">
                         {recentActivities.map(activity => (
