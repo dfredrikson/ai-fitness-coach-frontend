@@ -848,11 +848,6 @@ function Settings() {
 
 // Main App
 function App() {
-    const [notification, setNotification] = useState(null)
-    const showNotification = (msg) => {
-        setNotification(msg)
-    }
-
     return (
         <BrowserRouter>
             <AuthProvider>
@@ -869,10 +864,6 @@ function AppContent() {
 
     return (
         <>
-            <NotificationToast
-                message={notification}
-                onClose={() => setNotification(null)}
-            />
             {user && <Navbar />}
             <Routes>
                 <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
