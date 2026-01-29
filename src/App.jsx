@@ -850,22 +850,34 @@ function Settings() {
 
 // Main App
 function App() {
+    const [notification, setNotification] = useState(null)
+    const showNotification = (msg) => {
+        setNotification(msg)
+    }
     return (
         <BrowserRouter>
             <AuthProvider>
-                <AppContent />
+                <AppContent
+                    notification={notification}
+                    setNotification={setNotification}
+                    showNotification={showNotification}
+                />
             </AuthProvider>
         </BrowserRouter>
     )
 }
 
-function AppContent() {
+function AppContent({ notification, setNotification, showNotification }) {
     const { user, loading } = useAuth()
 
     if (loading) return <LoadingScreen />
 
     return (
         <>
+            <NotificationToast
+                message={notification}
+                onClose={() => setNotification(null)}
+            />
             {user && <Navbar />}
             <Routes>
                 <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
