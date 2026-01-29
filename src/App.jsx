@@ -244,6 +244,7 @@ function Dashboard() {
     const [activeCoach, setActiveCoach] = useState(null)
     const [syncing, setSyncing] = useState(false)
     const location = useLocation()
+    const [dailyMotivation, setDailyMotivation] = useState(null)
 
     useEffect(() => {
         loadData()
@@ -270,8 +271,7 @@ function Dashboard() {
             const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/motivation/daily`)
             const data = await res.json()
             if (data.message) {
-                // por ahora solo log, luego lo conectamos al toast
-                console.log("Motivación diaria:", data.message)
+                setDailyMotivation(data.message)
             }
         } catch (err) {
             console.error("Error motivación diaria", err)
@@ -295,114 +295,121 @@ function Dashboard() {
     }
 
     return (
-        <div className="page">
-            <div className="container">
-                <div style={{ marginBottom: '1.25rem' }}>
-                    <h1 style={{ fontSize: '1.75rem' }}>¡Hola, {user?.name}! 👋</h1>
-                    <p className="text-secondary">Tu entrenador {activeCoach?.name} está listo para ayudarte</p>
-                </div>
+        <>
+            <NotificationToast
+                message={dailyMotivation}
+                onClose={() => setDailyMotivation(null)}
+            />
 
-                {/* Strava Connection Card */}
-                <div className="card" style={{ marginBottom: '2rem', borderLeft: '4px solid var(--primary)' }}>
-                    <div className="flex-between">
-                        <div className="flex gap-2" style={{ alignItems: 'center' }}>
-                            <span style={{ fontSize: '2rem' }}>🔗</span>
-                            <div>
-                                <h4>Conexión con Strava</h4>
-                                <p className="text-secondary text-sm">
-                                    {stravaStatus?.connected ? 'Cuenta conectada' : 'Conecta tu cuenta para sincronizar entrenamientos'}
-                                </p>
+            <div className="page">
+                <div className="container">
+                    <div style={{ marginBottom: '1.25rem' }}>
+                        <h1 style={{ fontSize: '1.75rem' }}>¡Hola, {user?.name}! 👋</h1>
+                        <p className="text-secondary">Tu entrenador {activeCoach?.name} está listo para ayudarte</p>
+                    </div>
+
+                    {/* Strava Connection Card */}
+                    <div className="card" style={{ marginBottom: '2rem', borderLeft: '4px solid var(--primary)' }}>
+                        <div className="flex-between">
+                            <div className="flex gap-2" style={{ alignItems: 'center' }}>
+                                <span style={{ fontSize: '2rem' }}>🔗</span>
+                                <div>
+                                    <h4>Conexión con Strava</h4>
+                                    <p className="text-secondary text-sm">
+                                        {stravaStatus?.connected ? 'Cuenta conectada' : 'Conecta tu cuenta para sincronizar entrenamientos'}
+                                    </p>
+                                </div>
+                            </div>
+                            <div className="flex gap-1">
+                                {stravaStatus?.connected ? (
+                                    <>
+                                        <span className="badge badge-success">Conectado</span>
+                                        <button
+                                            onClick={handleSync}
+                                            className="btn btn-secondary"
+                                            style={{ padding: '0.5rem 1rem' }}
+                                            disabled={syncing}
+                                        >
+                                            {syncing ? '⏳' : '🔄'} Sincronizar
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button onClick={handleConnectStrava} className="btn btn-strava">
+                                        Conectar Strava
+                                    </button>
+                                )}
                             </div>
                         </div>
-                        <div className="flex gap-1">
-                            {stravaStatus?.connected ? (
-                                <>
-                                    <span className="badge badge-success">Conectado</span>
-                                    <button
-                                        onClick={handleSync}
-                                        className="btn btn-secondary"
-                                        style={{ padding: '0.5rem 1rem' }}
-                                        disabled={syncing}
-                                    >
-                                        {syncing ? '⏳' : '🔄'} Sincronizar
-                                    </button>
-                                </>
-                            ) : (
-                                <button onClick={handleConnectStrava} className="btn btn-strava">
-                                    Conectar Strava
-                                </button>
-                            )}
+                    </div>
+
+                    {/* Stats Grid */}
+                    <div className="grid grid-3 stats-grid" style={{ marginBottom: '1.5rem' }}>
+                        <div className="card" style={{ textAlign: 'center' }}>
+                            <span style={{ fontSize: '2.5rem' }}>{recentActivities.length}</span>
+                            <p className="text-secondary">Actividades recientes</p>
+                        </div>
+                        <div className="card" style={{ textAlign: 'center' }}>
+                            <span style={{ fontSize: '2.5rem' }}>{activeCoach?.icon || '🌟'}</span>
+                            <p className="text-secondary">{activeCoach?.name || 'Entrenador'}</p>
+                        </div>
+                        <div className="card" style={{ textAlign: 'center' }}>
+                            <span style={{ fontSize: '2.5rem' }}>
+                                {recentActivities.reduce((sum, a) => sum + (a.distance_km || 0), 0).toFixed(1)} km
+                            </span>
+                            <p className="text-secondary">Distancia total</p>
                         </div>
                     </div>
-                </div>
 
-                {/* Stats Grid */}
-                <div className="grid grid-3 stats-grid" style={{ marginBottom: '1.5rem' }}>
-                    <div className="card" style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: '2.5rem' }}>{recentActivities.length}</span>
-                        <p className="text-secondary">Actividades recientes</p>
-                    </div>
-                    <div className="card" style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: '2.5rem' }}>{activeCoach?.icon || '🌟'}</span>
-                        <p className="text-secondary">{activeCoach?.name || 'Entrenador'}</p>
-                    </div>
-                    <div className="card" style={{ textAlign: 'center' }}>
-                        <span style={{ fontSize: '2.5rem' }}>
-                            {recentActivities.reduce((sum, a) => sum + (a.distance_km || 0), 0).toFixed(1)} km
-                        </span>
-                        <p className="text-secondary">Distancia total</p>
-                    </div>
-                </div>
-
-                {/* Recent Activities */}
-                <h3 style={{ marginBottom: '0.75rem' }}>Últimas actividades</h3>
-                {recentActivities.length > 0 ? (
-                    <div className="grid gap-2">
-                        {recentActivities.map(activity => (
-                            <Link key={activity.id} to={`/activities/${activity.id}`}>
-                                <div className="card flex-between">
-                                    <div className="flex gap-2" style={{ alignItems: 'center' }}>
-                                        <span style={{ fontSize: '1.5rem' }}>
-                                            {activity.type === 'Run' ? '🏃' : activity.type === 'Ride' ? '🚴' : '💪'}
-                                        </span>
-                                        <div>
-                                            <h4>{activity.name}</h4>
-                                            <p className="text-secondary text-sm">
-                                                {new Date(activity.start_date).toLocaleDateString('es-ES', {
-                                                    weekday: 'short', day: 'numeric', month: 'short'
-                                                })}
-                                            </p>
+                    {/* Recent Activities */}
+                    <h3 style={{ marginBottom: '0.75rem' }}>Últimas actividades</h3>
+                    {recentActivities.length > 0 ? (
+                        <div className="grid gap-2">
+                            {recentActivities.map(activity => (
+                                <Link key={activity.id} to={`/activities/${activity.id}`}>
+                                    <div className="card flex-between">
+                                        <div className="flex gap-2" style={{ alignItems: 'center' }}>
+                                            <span style={{ fontSize: '1.5rem' }}>
+                                                {activity.type === 'Run' ? '🏃' : activity.type === 'Ride' ? '🚴' : '💪'}
+                                            </span>
+                                            <div>
+                                                <h4>{activity.name}</h4>
+                                                <p className="text-secondary text-sm">
+                                                    {new Date(activity.start_date).toLocaleDateString('es-ES', {
+                                                        weekday: 'short', day: 'numeric', month: 'short'
+                                                    })}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div className="activity-stats flex gap-3">
+                                            <div>
+                                                <p style={{ fontWeight: 600 }}>{activity.distance_km?.toFixed(2)} km</p>
+                                                <p className="text-secondary text-sm">Distancia</p>
+                                            </div>
+                                            <div>
+                                                <p style={{ fontWeight: 600 }}>{Math.floor(activity.duration_minutes)} min</p>
+                                                <p className="text-secondary text-sm">Duración</p>
+                                            </div>
+                                            {activity.analyzed ? (
+                                                <span className="badge badge-success">Analizado</span>
+                                            ) : (
+                                                <span className="badge badge-warning">Pendiente</span>
+                                            )}
                                         </div>
                                     </div>
-                                    <div className="activity-stats flex gap-3">
-                                        <div>
-                                            <p style={{ fontWeight: 600 }}>{activity.distance_km?.toFixed(2)} km</p>
-                                            <p className="text-secondary text-sm">Distancia</p>
-                                        </div>
-                                        <div>
-                                            <p style={{ fontWeight: 600 }}>{Math.floor(activity.duration_minutes)} min</p>
-                                            <p className="text-secondary text-sm">Duración</p>
-                                        </div>
-                                        {activity.analyzed ? (
-                                            <span className="badge badge-success">Analizado</span>
-                                        ) : (
-                                            <span className="badge badge-warning">Pendiente</span>
-                                        )}
-                                    </div>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
-                ) : (
-                    <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
-                        <span style={{ fontSize: '3rem' }}>🏃‍♂️</span>
-                        <p className="text-secondary" style={{ marginTop: '1rem' }}>
-                            No hay actividades todavía. ¡Conecta Strava y sincroniza tus entrenamientos!
-                        </p>
-                    </div>
-                )}
+                                </Link>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="card" style={{ textAlign: 'center', padding: '3rem' }}>
+                            <span style={{ fontSize: '3rem' }}>🏃‍♂️</span>
+                            <p className="text-secondary" style={{ marginTop: '1rem' }}>
+                                No hay actividades todavía. ¡Conecta Strava y sincroniza tus entrenamientos!
+                            </p>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     )
 }
 
