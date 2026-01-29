@@ -247,6 +247,7 @@ function Dashboard() {
 
     useEffect(() => {
         loadData()
+        fetchDailyMotivation()
     }, [])
 
     const loadData = async () => {
@@ -261,6 +262,19 @@ function Dashboard() {
             setActiveCoach(coachData)
         } catch (err) {
             console.error(err)
+        }
+    }
+
+    const fetchDailyMotivation = async () => {
+        try {
+            const res = await fetch("/api/v1/motivation/daily")
+            const data = await res.json()
+            if (data.message) {
+                // por ahora solo log, luego lo conectamos al toast
+                console.log("Motivación diaria:", data.message)
+            }
+        } catch (err) {
+            console.error("Error motivación diaria", err)
         }
     }
 
