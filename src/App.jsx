@@ -260,11 +260,15 @@ function Dashboard() {
                 activities.list(1, 5).catch(() => ({ items: [] })),
                 coach.getActive()
             ])
+
             setStravaStatus(status)
             setRecentActivities(acts.items || [])
             setActiveCoach(coachData)
+
+            return acts.items || []
         } catch (err) {
             console.error(err)
+            return []
         }
     }
 
@@ -292,9 +296,11 @@ function Dashboard() {
             const prevCount = recentActivities.length
 
             await strava.sync(30)
-            await loadData()
 
-            const newCount = recentActivities.length
+            const updatedActivities = await loadData()
+            const newCount = updatedActivities.length
+
+            console.log("Prev:", prevCount, "New:", newCount)
 
             if (newCount > prevCount) {
                 setEventToast("🔥 Nueva actividad registrada. Seguimos sumando.")
