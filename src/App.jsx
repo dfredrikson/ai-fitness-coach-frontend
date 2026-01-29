@@ -292,6 +292,8 @@ function Dashboard() {
     const handleSync = async () => {
         setSyncing(true)
 
+        setEventToast("🧪 Toast de prueba — si ves esto, el render funciona")
+
         try {
             const prevCount = recentActivities.length
 
