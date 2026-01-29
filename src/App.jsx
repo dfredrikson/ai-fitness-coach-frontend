@@ -267,7 +267,7 @@ function Dashboard() {
 
     const fetchDailyMotivation = async () => {
         try {
-            const res = await fetch("/api/v1/motivation/daily")
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/motivation/daily`)
             const data = await res.json()
             if (data.message) {
                 // por ahora solo log, luego lo conectamos al toast
