@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+
 export default function NotificationToast({ message, onClose }) {
     if (!message) return null
 
