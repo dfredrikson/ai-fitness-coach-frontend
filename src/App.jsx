@@ -293,17 +293,20 @@ function Dashboard() {
         setSyncing(true)
 
         try {
-            const prevCount = recentActivities.length
+
+            const prevIds = recentActivities.map(a => a.id)
 
             await strava.sync(30)
 
             const updatedActivities = await loadData()
-            const newCount = updatedActivities.length
 
-            console.log("Prev:", prevCount, "New:", newCount)
+            const newIds = updatedActivities.map(a => a.id)
 
-            if (newCount > prevCount) {
+            const hasNewActivity = newIds.some(id => !prevIds.includes(id))
+
+            if (hasNewActivity && !sessionStorage.getItem("activityToastShown")) {
                 setEventToast("🔥 Nueva actividad registrada. Seguimos sumando.")
+                sessionStorage.setItem("activityToastShown", "true")
             }
 
         } catch (err) {
@@ -312,6 +315,7 @@ function Dashboard() {
 
         setSyncing(false)
     }
+
 
     return (
         <>
