@@ -2,6 +2,7 @@ import { useState, useEffect, createContext, useContext } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate, useLocation } from 'react-router-dom'
 import { auth, strava, activities, coach, routines } from './services/api'
 import NotificationToast from "./components/NotificationToast"
+import { motivationalPhrases } from './data/motivationalPhrases'
 
 // Auth Context
 const AuthContext = createContext(null)
@@ -305,10 +306,8 @@ function Dashboard() {
             const hasNewActivity = newIds.some(id => !prevIds.includes(id))
 
             if (hasNewActivity) {
-                const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/motivation/random-activity`)
-                const data = await res.json()
-
-                setEventToast(data.message || "🔥 Nueva actividad registrada.")
+                const randomPhrase = motivationalPhrases[Math.floor(Math.random() * motivationalPhrases.length)]
+                setEventToast(randomPhrase)
             }
 
         } catch (err) {
