@@ -304,12 +304,11 @@ function Dashboard() {
 
             const hasNewActivity = newIds.some(id => !prevIds.includes(id))
 
-            if (hasNewActivity && !sessionStorage.getItem("activityToastShown")) {
+            if (hasNewActivity) {
                 const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/motivation/random-activity`)
                 const data = await res.json()
 
                 setEventToast(data.message || "🔥 Nueva actividad registrada.")
-                sessionStorage.setItem("activityToastShown", "true")
             }
 
         } catch (err) {
