@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext, useContext } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, Link, useNavigate, useLocation } from 'react-router-dom'
-import { auth, strava, activities, coach, routines } from './services/api'
+import { auth, strava, activities, coach, routines, notifications } from './services/api'
 import NotificationToast from "./components/NotificationToast"
 import { motivationalPhrases } from './data/motivationalPhrases'
 
@@ -285,6 +285,34 @@ function Dashboard() {
         }
     }
 
+    // Poll for notifications
+    useEffect(() => {
+        if (!user) return
+
+        let interval
+
+        const checkNotifications = async () => {
+            try {
+                const notifs = await notifications.list()
+                if (notifs && notifs.length > 0) {
+                    const latest = notifs[0]
+                    setEventToast(latest.body)
+
+                    // Mark as read immediately after showing (or when closed - simplified for now)
+                    await notifications.markAsRead(latest.id)
+                }
+            } catch (err) {
+                console.error("Error polling notifications", err)
+            }
+        }
+
+        // Check immediately and then every 10 seconds
+        checkNotifications()
+        interval = setInterval(checkNotifications, 10000)
+
+        return () => clearInterval(interval)
+    }, [user])
+
     const handleConnectStrava = async () => {
         const { authorization_url } = await strava.getConnectUrl()
         window.location.href = authorization_url
@@ -294,22 +322,9 @@ function Dashboard() {
         setSyncing(true)
 
         try {
-
-            const prevIds = recentActivities.map(a => a.id)
-
             await strava.sync(30)
-
-            const updatedActivities = await loadData()
-
-            const newIds = updatedActivities.map(a => a.id)
-
-            const hasNewActivity = newIds.some(id => !prevIds.includes(id))
-
-            if (hasNewActivity) {
-                const randomPhrase = motivationalPhrases[Math.floor(Math.random() * motivationalPhrases.length)]
-                setEventToast(randomPhrase)
-            }
-
+            await loadData()
+            // Notifications are now handled by polling the backend
         } catch (err) {
             console.error(err)
         }

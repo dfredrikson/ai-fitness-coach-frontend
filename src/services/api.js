@@ -78,6 +78,12 @@ export const routines = {
     compliance: (id) => request(`/routines/${id}/compliance`),
 };
 
+// Notifications
+export const notifications = {
+    list: () => request('/notifications'),
+    markAsRead: (id) => request(`/notifications/${id}/read`, { method: 'POST' }),
+};
+
 export default {
     auth,
     users,
@@ -85,4 +91,5 @@ export default {
     activities,
     coach,
     routines,
+    notifications,
 };
