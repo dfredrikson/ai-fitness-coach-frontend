@@ -273,15 +273,21 @@ function Dashboard() {
         }
     }
 
-    const fetchDailyMotivation = async () => {
+    const fetchNotifications = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/motivation/daily`)
-            const data = await res.json()
-            if (data.message) {
-                setDailyMotivation(data.message)
+            const data = await notifications.list()
+            console.log("🔔 Notifications:", data)
+
+            if (data.length > 0) {
+                const n = data[0]
+                setToast({
+                    title: n.title,
+                    body: n.body,
+                    id: n.id
+                })
             }
         } catch (err) {
-            console.error("Error motivación diaria", err)
+            console.error("Error polling notifications", err)
         }
     }
 
