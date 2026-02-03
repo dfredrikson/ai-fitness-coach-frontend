@@ -273,7 +273,7 @@ function Dashboard() {
         }
     }
 
-    const fetchNotifications = async () => {
+    const fetchDailyMotivation = async () => {
         try {
             const data = await notifications.list()
             console.log("🔔 Notifications:", data)
