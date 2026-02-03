@@ -80,7 +80,7 @@ export const routines = {
 
 // Notifications
 export const notifications = {
-    list: () => request('/notifications'),
+    list: () => request('/notifications/'),
     markAsRead: (id) => request(`/notifications/${id}/read`, { method: 'POST' }),
 };
 
